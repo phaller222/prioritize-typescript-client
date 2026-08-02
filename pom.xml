@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This pom.xml is NOT part of the published npm package — npm ignores it.
+    It is only the code-generation harness: it runs the OpenAPI Generator in
+    `typescript-fetch` mode against openapi/openapi.json and writes the npm
+    package (package.json, tsconfig.json, src/) into the repo root. The
+    generated TypeScript is never hand-edited; to update the client, replace
+    openapi/openapi.json with the next released spec and run `./generate.sh`
+    (or `mvn generate-sources`).
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.hallerweb</groupId>
+    <artifactId>prioritize-typescript-client-codegen</artifactId>
+    <version>1.3.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <openapi-generator.version>7.10.0</openapi-generator.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-prioritize-typescript-client</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/openapi/openapi.json</inputSpec>
+                            <output>${project.basedir}</output>
+                            <generatorName>typescript-fetch</generatorName>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                            <generateApiDocumentation>true</generateApiDocumentation>
+                            <generateModelDocumentation>true</generateModelDocumentation>
+                            <configOptions>
+                                <npmName>prioritize-client</npmName>
+                                <npmVersion>1.3.0-SNAPSHOT</npmVersion>
+                                <supportsES6>true</supportsES6>
+                                <typescriptThreePlus>true</typescriptThreePlus>
+                                <withInterfaces>true</withInterfaces>
+                                <useSingleRequestParameter>true</useSingleRequestParameter>
+                                <licenseName>Apache-2.0</licenseName>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

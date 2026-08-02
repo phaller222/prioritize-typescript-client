@@ -1,0 +1,20 @@
+# Maven codegen harness artifacts
+/target/
+
+# npm
+/node_modules/
+/dist/
+package-lock.json
+wwwroot/*.js
+typings
+
+# OpenAPI Generator bookkeeping
+/.openapi-generator/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
