@@ -20,6 +20,7 @@ import type {
   ResourceGroupDTO,
   ResourceRequest,
   ResourceReservationDTO,
+  ResourceStatusDTO,
   ResourceValueDTO,
   ResourceValueRequest,
   SkillRecordDTO,
@@ -36,6 +37,8 @@ import {
     ResourceRequestToJSON,
     ResourceReservationDTOFromJSON,
     ResourceReservationDTOToJSON,
+    ResourceStatusDTOFromJSON,
+    ResourceStatusDTOToJSON,
     ResourceValueDTOFromJSON,
     ResourceValueDTOToJSON,
     ResourceValueRequestFromJSON,
@@ -296,6 +299,20 @@ export interface ResourcesApiInterface {
      * Retrieves a resource, if the current user is authorized
      */
     resourceGetResource(requestParameters: ResourceGetResourceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceDTO>;
+
+    /**
+     * 
+     * @summary Returns every readable resource with its latest values and monitoring rules
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResourcesApiInterface
+     */
+    resourceGetResourceStatusRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ResourceStatusDTO>>>;
+
+    /**
+     * Returns every readable resource with its latest values and monitoring rules
+     */
+    resourceGetResourceStatus(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ResourceStatusDTO>>;
 
     /**
      * 
@@ -917,6 +934,43 @@ export class ResourcesApi extends runtime.BaseAPI implements ResourcesApiInterfa
      */
     async resourceGetResource(requestParameters: ResourceGetResourceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ResourceDTO> {
         const response = await this.resourceGetResourceRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Returns every readable resource with its latest values and monitoring rules
+     */
+    async resourceGetResourceStatusRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ResourceStatusDTO>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && (this.configuration.username !== undefined || this.configuration.password !== undefined)) {
+            headerParameters["Authorization"] = "Basic " + btoa(this.configuration.username + ":" + this.configuration.password);
+        }
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("bearerAuth", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/api/v1/resources/status`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ResourceStatusDTOFromJSON));
+    }
+
+    /**
+     * Returns every readable resource with its latest values and monitoring rules
+     */
+    async resourceGetResourceStatus(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ResourceStatusDTO>> {
+        const response = await this.resourceGetResourceStatusRaw(initOverrides);
         return await response.value();
     }
 

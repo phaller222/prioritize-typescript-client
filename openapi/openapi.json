@@ -3591,6 +3591,30 @@
         }
       }
     },
+    "/api/v1/resources/status": {
+      "get": {
+        "tags": [
+          "Resources"
+        ],
+        "summary": "Returns every readable resource with its latest values and monitoring rules",
+        "operationId": "resource_getResourceStatus",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResourceStatusDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/resourcegroups/{groupId}/resources/{resourceId}/skills": {
       "get": {
         "tags": [
@@ -5563,6 +5587,26 @@
           },
           "value": {
             "type": "string"
+          }
+        }
+      },
+      "ResourceStatusDTO": {
+        "type": "object",
+        "properties": {
+          "resource": {
+            "$ref": "#/components/schemas/ResourceDTO"
+          },
+          "latestValues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResourceValueDTO"
+            }
+          },
+          "telemetryRules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TelemetryRuleDTO"
+            }
           }
         }
       },

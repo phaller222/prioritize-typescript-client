@@ -31,6 +31,7 @@ export * from './ResourceDTO';
 export * from './ResourceGroupDTO';
 export * from './ResourceRequest';
 export * from './ResourceReservationDTO';
+export * from './ResourceStatusDTO';
 export * from './ResourceValueDTO';
 export * from './ResourceValueRequest';
 export * from './ScanResult';
