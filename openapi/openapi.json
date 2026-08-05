@@ -12,7 +12,7 @@
       "name": "Apache License 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0"
     },
-    "version": "1.3.0-SNAPSHOT"
+    "version": "1.3.0"
   },
   "servers": [
     {
@@ -523,6 +523,69 @@
         "parameters": [
           {
             "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/resourcegroups/{groupId}": {
+      "put": {
+        "tags": [
+          "Resources"
+        ],
+        "summary": "Renames a resource group, if the current user is authorized",
+        "operationId": "resource_renameResourceGroup",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceGroupDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Resources"
+        ],
+        "summary": "Deletes a resource group, if the current user is authorized",
+        "operationId": "resource_deleteResourceGroup",
+        "parameters": [
+          {
+            "name": "groupId",
             "in": "path",
             "required": true,
             "schema": {
@@ -2534,6 +2597,39 @@
       }
     },
     "/api/v1/departments/{deptId}/resourcegroups": {
+      "get": {
+        "tags": [
+          "Resources"
+        ],
+        "summary": "Returns the resource groups of a department",
+        "operationId": "resource_getResourceGroups",
+        "parameters": [
+          {
+            "name": "deptId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResourceGroupDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Resources"
@@ -4147,31 +4243,6 @@
         }
       }
     },
-    "/api/v1/resourcegroups/{groupId}": {
-      "delete": {
-        "tags": [
-          "Resources"
-        ],
-        "summary": "Deletes a resource group, if the current user is authorized",
-        "operationId": "resource_deleteResourceGroup",
-        "parameters": [
-          {
-            "name": "groupId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/v1/reservations/{reservationId}": {
       "delete": {
         "tags": [
@@ -4614,6 +4685,22 @@
           },
           "parentName": {
             "type": "string"
+          }
+        }
+      },
+      "ResourceGroupDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "departmentId": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -5478,22 +5565,6 @@
         }
       },
       "DocumentGroupDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          },
-          "departmentId": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
-      "ResourceGroupDTO": {
         "type": "object",
         "properties": {
           "id": {

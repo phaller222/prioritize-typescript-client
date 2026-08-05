@@ -10,10 +10,10 @@ contract of the release it targets.
 - **Client version tracks the API version:** a `1.x` client targets the `1.x` REST API.
 - **License:** Apache-2.0 (same as Prioritize).
 
-> **Status:** this client targets **`1.3.0-SNAPSHOT`**, which adds the flat `GET /api/v1/resources`
-> list and `GET /api/v1/resources/{id}/values/latest` reads used by the demo dashboard. It is **not yet
-> published to npm** — build it locally (see [Building](#building)) or reference it via a local path
-> until `1.3.0` is released.
+> **Status:** generated from the released **`1.3.0`** contract, which is what made resources reachable
+> over REST — the flat `GET /api/v1/resources`, `GET /api/v1/resources/{id}/values/latest`, the combined
+> `GET /api/v1/resources/status` and the resource-group listing. It is **not yet published to npm** —
+> build it locally (see [Building](#building)) or reference it via a local path.
 
 ## Installation
 
