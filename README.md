@@ -88,3 +88,34 @@ files (this README, `LICENSE`, `pom.xml`, `generate.sh`, `.gitignore`, `openapi/
 This uses the Maven-based OpenAPI Generator harness (`pom.xml`) — the only reason Maven is involved; it
 is not part of the published package. Remember to bump `npmVersion` in `pom.xml` to match the API
 release before regenerating.
+
+## Releasing (maintainers)
+
+Releases are published to npm by GitHub Actions (`.github/workflows/publish.yml`) when a `v*` tag is
+pushed. Authentication uses **npm Trusted Publishing (OIDC)**: GitHub mints a short-lived credential for
+this repository and workflow, and npm verifies it. There is no `NODE_AUTH_TOKEN`, no granular access token
+to store, and nothing that expires. Trusted publishing also satisfies npm's 2FA requirement, and npm
+attaches a provenance attestation to the published package automatically.
+
+```bash
+# bump npmVersion in pom.xml, regenerate, commit, then:
+git tag -a v1.5.0 -m "Release 1.5.0"
+git push origin v1.5.0        # the workflow builds and publishes
+```
+
+The workflow refuses to publish if the tag disagrees with `version` in `package.json`.
+
+### One-time setup
+
+On <https://www.npmjs.com/package/prioritize-client/access>, under *Trusted publishers*, add a GitHub
+Actions publisher:
+
+| Field | Value |
+|---|---|
+| Organization or user | `phaller222` |
+| Repository | `prioritize-typescript-client` |
+| Workflow filename | `publish.yml` |
+| Environment | `npm` |
+
+The environment name must match the `environment:` key in the workflow; create it under the repository's
+*Settings → Environments* too.
