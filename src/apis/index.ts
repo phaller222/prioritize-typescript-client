@@ -9,6 +9,7 @@ export * from './ProcessDefinitionsApi';
 export * from './ProcessInstancesApi';
 export * from './ProjectGoalsApi';
 export * from './ProjectsApi';
+export * from './QualificationLevelsApi';
 export * from './ResourcesApi';
 export * from './SkillsApi';
 export * from './TaskSchedulesApi';
