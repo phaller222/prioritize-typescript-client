@@ -29,10 +29,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Deliberately WITHOUT registry-url. That option writes an .npmrc containing
+      # //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}, and with no token in the
+      # environment npm sends the literal placeholder as the credential — which means it
+      # never attempts OIDC at all and the publish dies with a misleading
+      # "404 Not Found - PUT .../prioritize-client". The registry is passed to npm publish
+      # instead. (Cost one failed release run on 2026-09-18.)
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          registry-url: "https://registry.npmjs.org"
 
       # Trusted publishing needs npm >= 11.5.1; the npm bundled with the Node
       # runner image is usually older.
@@ -57,4 +62,4 @@ jobs:
           npm run build
 
       - name: Publish
-        run: npm publish
+        run: npm publish --registry=https://registry.npmjs.org
